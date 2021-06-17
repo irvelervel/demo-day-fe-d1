@@ -7,7 +7,7 @@ import { User } from '../typings/User'
 import StudentCard from './StudentCard'
 import { isAdmin } from '../lib/helpers'
 
-const HomePage = ({ history, location, match }: RouteComponentProps) => {
+const HomePage = (routerProps: RouteComponentProps) => {
   const [users, setUsers] = useState([])
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const HomePage = ({ history, location, match }: RouteComponentProps) => {
       <Row>
         {users.map((user: User) => (
           <Col key={user._id} lg={6} className={!user.profilePic ? 'd-none student-column' : 'student-column'}>
-            <StudentCard user={user} />
+            <StudentCard user={user} {...routerProps} />
           </Col>
         ))}
       </Row>

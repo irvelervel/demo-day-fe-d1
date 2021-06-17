@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/esm/Container'
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
 import { isStudent } from '../lib/helpers'
 
-const NavBar = ({ history }: RouteComponentProps) => (
+const NavBar = ({ location, history }: RouteComponentProps) => (
   <Container>
     <div className="d-flex justify-content-between my-5">
       <Link to="/">
@@ -13,7 +13,7 @@ const NavBar = ({ history }: RouteComponentProps) => (
           Login
         </button>
       )}
-      {localStorage.getItem('demoday_logged_in') && isStudent() && (
+      {isStudent() && location.pathname !== '/profile/me' && (
         <button className="login" onClick={() => history.push('/profile/me')}>
           Profile
         </button>

@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/esm/Col'
 import Form from 'react-bootstrap/esm/Form'
 import Toast from 'react-bootstrap/esm/Toast'
 import { Button } from 'react-bootstrap'
+import { isAdmin } from '../lib/helpers'
 
 interface MatchParams {
   id: string
@@ -21,9 +22,6 @@ interface ProfileState {
 class Profile extends Component<RouteComponentProps<MatchParams>, ProfileState> {
   state: ProfileState = {
     user: {
-      _id: '',
-      createdAt: '',
-      updatedAt: '',
       firstName: '',
       lastName: '',
       profilePic: '',
@@ -32,11 +30,11 @@ class Profile extends Component<RouteComponentProps<MatchParams>, ProfileState> 
       capstoneURL: '',
       linkedinURL: '',
       youtubeURL: '',
+      oneLiner: '',
       availableToRelocation: false,
       located: '',
       desiredPosition: '',
       approved: false,
-      oneLiner: '',
     },
     successToast: false,
     errorToast: false,
@@ -72,8 +70,14 @@ class Profile extends Component<RouteComponentProps<MatchParams>, ProfileState> 
       formData.append(k, (this.state.user as Record<string, any>)[k])
     })
 
+    if (!isAdmin()) {
+      formData.delete('youtubeURL')
+      formData.delete('oneLiner')
+      formData.delete('role')
+    }
+
     try {
-      let response = await fetch(process.env.REACT_APP_BE_URL + '/users/me', {
+      let response = await fetch(process.env.REACT_APP_BE_URL + '/students/' + this.props.match.params.id, {
         credentials: 'include',
         method: 'PUT',
         body: formData,
@@ -156,13 +160,26 @@ class Profile extends Component<RouteComponentProps<MatchParams>, ProfileState> 
                 value={this.state.user.capstoneURL}
                 onChange={this.handleInput}
               />
-              <Form.Control
-                placeholder="Insert your youtube url"
-                id="youtubeURL"
-                className="form-field mb-3"
-                value={this.state.user.youtubeURL}
-                onChange={this.handleInput}
-              />
+              {isAdmin() && (
+                <Form.Control
+                  placeholder="Insert your youtube url"
+                  id="youtubeURL"
+                  className="form-field mb-3"
+                  value={this.state.user.youtubeURL}
+                  onChange={this.handleInput}
+                />
+              )}
+              {isAdmin() && (
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  placeholder="Insert the oneLiner"
+                  id="oneLiner"
+                  value={this.state.user.oneLiner}
+                  onChange={this.handleInput}
+                  className="form-field mb-3"
+                />
+              )}
               <Form.Control
                 placeholder="Insert your location"
                 id="located"
