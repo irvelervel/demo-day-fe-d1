@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { User } from '../typings/User'
 import StudentCard from './StudentCard'
+import { isAdmin } from '../lib/helpers'
 
 const HomePage = ({ history, location, match }: RouteComponentProps) => {
   const [users, setUsers] = useState([])
@@ -12,12 +13,12 @@ const HomePage = ({ history, location, match }: RouteComponentProps) => {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        let response = await fetch(process.env.REACT_APP_BE_URL + '/users', {
+        let response = await fetch(process.env.REACT_APP_BE_URL + '/students' + (!isAdmin() ? '?approved=true' : ''), {
           credentials: 'include',
         })
         if (response.ok) {
           let data = await response.json()
-          setUsers(data.users)
+          setUsers(data.students)
         } else {
           console.log('error')
         }

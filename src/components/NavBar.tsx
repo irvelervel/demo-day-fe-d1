@@ -1,5 +1,6 @@
 import Container from 'react-bootstrap/esm/Container'
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
+import { isStudent } from '../lib/helpers'
 
 const NavBar = ({ history }: RouteComponentProps) => (
   <Container>
@@ -12,7 +13,7 @@ const NavBar = ({ history }: RouteComponentProps) => (
           Login
         </button>
       )}
-      {localStorage.getItem('demoday_logged_in') && (
+      {localStorage.getItem('demoday_logged_in') && isStudent() && (
         <button className="login" onClick={() => history.push('/profile/me')}>
           Profile
         </button>

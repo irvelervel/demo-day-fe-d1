@@ -8,13 +8,17 @@ import Form from 'react-bootstrap/esm/Form'
 import Toast from 'react-bootstrap/esm/Toast'
 import { Button } from 'react-bootstrap'
 
+interface MatchParams {
+  id: string
+}
+
 interface ProfileState {
   user: User
   successToast: boolean
   errorToast: boolean
 }
 
-class Profile extends Component<RouteComponentProps, ProfileState> {
+class Profile extends Component<RouteComponentProps<MatchParams>, ProfileState> {
   state: ProfileState = {
     user: {
       _id: '',
@@ -40,7 +44,7 @@ class Profile extends Component<RouteComponentProps, ProfileState> {
 
   componentDidMount = async () => {
     try {
-      let response = await fetch(process.env.REACT_APP_BE_URL + '/users/me', {
+      let response = await fetch(process.env.REACT_APP_BE_URL + '/students/' + this.props.match.params.id, {
         credentials: 'include',
       })
       if (response.ok) {

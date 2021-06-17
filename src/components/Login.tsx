@@ -33,10 +33,11 @@ const Login = ({ history }: RouteComponentProps) => {
         // withCredentials: {true}
       })
       if (response.ok) {
+        let user = await response.json()
         setSuccessToast(true)
-        localStorage.setItem('demoday_logged_in', 'true')
+        localStorage.setItem('demoday_logged_in', user.role)
         setTimeout(() => {
-          history.push('/profile/me')
+          history.push(user.role === 'Student' ? '/profile/me' : '/')
         }, 2000)
       } else {
         setErrorToast(true)

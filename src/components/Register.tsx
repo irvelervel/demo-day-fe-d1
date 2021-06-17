@@ -14,6 +14,8 @@ const Register = ({ history }: RouteComponentProps) => {
   const [successToast, setSuccessToast] = useState(false)
   const [errorToast, setErrorToast] = useState(false)
 
+  const [profileType, setProfileType] = useState('students')
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     const payload = {
@@ -22,7 +24,9 @@ const Register = ({ history }: RouteComponentProps) => {
     }
 
     try {
-      let response = await fetch(process.env.REACT_APP_BE_URL + '/users/register', {
+      let response = await fetch(process.env.REACT_APP_BE_URL + '/' + profileType + '/register', {
+        // localhost:3001/students/register
+        // localhost:3001/companies/register
         method: 'POST',
         body: JSON.stringify(payload),
         headers: {
@@ -64,6 +68,15 @@ const Register = ({ history }: RouteComponentProps) => {
               onChange={(e) => setPassword(e.currentTarget.value)}
               className="form-field mb-3"
             />
+            <Form.Control
+              as="select"
+              value={profileType}
+              onChange={(e) => setProfileType(e.target.value)}
+              className="form-field mb-3"
+            >
+              <option value="students">Student</option>
+              <option value="companies">Company</option>
+            </Form.Control>
             <Button type="submit" className="bg-strive-primary">
               Register
             </Button>
